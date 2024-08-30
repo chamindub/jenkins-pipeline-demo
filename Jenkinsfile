@@ -18,6 +18,17 @@ pipeline {
                     // Example: mvn test
                 }
             }
+            post {
+                always {
+                    emailext(
+                        subject: "Jenkins Pipeline: Unit and Integration Tests - ${currentBuild.currentResult}",
+                        body: """The Unit and Integration Tests stage has completed with status: ${currentBuild.currentResult}.
+                                Please find the build logs attached.""",
+                        to: 'chamindub69@gmail.com',
+                        attachLog: true
+                    )
+                }
+            }
         }
         
         stage('Code Analysis') {
@@ -34,6 +45,17 @@ pipeline {
                 script {
                     echo 'Running security scan...'
                     // Example: mvn dependency-check:check
+                }
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Jenkins Pipeline: Security Scan - ${currentBuild.currentResult}",
+                        body: """The Security Scan stage has completed with status: ${currentBuild.currentResult}.
+                                Please find the build logs attached.""",
+                        to: 'chamindub69@gmail.com',
+                        attachLog: true
+                    )
                 }
             }
         }
@@ -71,7 +93,6 @@ pipeline {
             emailext(
                 subject: "Jenkins Pipeline Result: ${currentBuild.fullDisplayName}",
                 body: "Build Status: ${currentBuild.currentResult}",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
                 to: 'chamindub69@gmail.com',
                 attachLog: true
             )
