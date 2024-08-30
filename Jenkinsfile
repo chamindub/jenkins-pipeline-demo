@@ -21,9 +21,9 @@ pipeline {
             post {
                 always {
                     emailext(
-                        subject: "Jenkins Pipeline: Unit and Integration Tests - ${currentBuild.currentResult}",
-                        body: """The Unit and Integration Tests stage has completed with status: ${currentBuild.currentResult}.
-                                Please find the build logs attached.""",
+                        subject: "Jenkins Pipeline - Unit and Integration Tests: ${currentBuild.fullDisplayName}",
+                        body: "Build Status: ${currentBuild.currentResult}\n\nStage: Unit and Integration Tests",
+                        recipientProviders: [[$class: 'DevelopersRecipientProvider']],
                         to: 'chamindub69@gmail.com',
                         attachLog: true
                     )
@@ -50,9 +50,9 @@ pipeline {
             post {
                 always {
                     emailext(
-                        subject: "Jenkins Pipeline: Security Scan - ${currentBuild.currentResult}",
-                        body: """The Security Scan stage has completed with status: ${currentBuild.currentResult}.
-                                Please find the build logs attached.""",
+                        subject: "Jenkins Pipeline - Security Scan: ${currentBuild.fullDisplayName}",
+                        body: "Build Status: ${currentBuild.currentResult}\n\nStage: Security Scan",
+                        recipientProviders: [[$class: 'DevelopersRecipientProvider']],
                         to: 'chamindub69@gmail.com',
                         attachLog: true
                     )
@@ -85,17 +85,6 @@ pipeline {
                     // Example: deploy to production server
                 }
             }
-        }
-    }
-    
-    post {
-        always {
-            emailext(
-                subject: "Jenkins Pipeline Result: ${currentBuild.fullDisplayName}",
-                body: "Build Status: ${currentBuild.currentResult}",
-                to: 'chamindub69@gmail.com',
-                attachLog: true
-            )
         }
     }
 }
